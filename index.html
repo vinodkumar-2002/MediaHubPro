@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaHubPro</title>
+    <link rel="icon" href="logo.jpeg" type="image/jpeg" style="border-radius: 16px;">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            /* text-align: center; */
+            margin: 20vh 0;
+            background: linear-gradient(to right, #F0F8FF, #72A0C1, #007FFF);
+            color: white;
+        }
+
+        .container {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 5em;
+            color: #15181a;
+        }
+
+        h2 {
+            color: #3498db;
+        }
+
+        nav {
+            background: linear-gradient(to right, #F0F8FF, #72A0C1, #007FFF);
+        }
+    </style>
+    <style>
+        /* Styles for the spinner and overlay */
+        #spinner-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        video {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" style="font-size: 30px;">
+                <img src="logo.jpeg" width="35" height="35" class="d-inline-block align-text-top">
+                MediaHubPro
+            </a>
+        </div>
+    </nav>
+
+    <!-- first div -->
+    <div id="firstDiv" class="container my-4" style="text-align: center;">
+        <h2 class="mb-4 my-5" style="font-size: 55px; color: rgb(6, 5, 5); font-weight: bold;">Multi-Media Downloader
+        </h2>
+
+        <form id="videoForm" class="my-5">
+            <div class="form-group my-4" style="display: flex; align-items: center;">
+                <div class="mb-3 mx-3 input-group my-4">
+                    <input type="text" style="width: 10;" id="redirectInput" required class="form-control"
+                        placeholder="Paste URL">
+                    <button class="btn btn-primary" type="button" onclick="togglePasteClear()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" fill="currentColor"
+                            class="bi bi-clipboard mx-1" viewBox="0 0 16 16">
+                            <path
+                                d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                            <path
+                                d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                        </svg>
+                        Paste
+                    </button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="downloadVideo()">Download</button>
+        </form>
+
+    </div>
+
+    <!-- second div -->
+    <!-- style="display: none;" -->
+    <div id="secondDiv" class="container my-4" style="align-items: center; color: #15181a; display: none;">
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <video class="mx-auto d-block" id="video" width="640" height="400" controls>
+                    <source
+                        src=""
+                        type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <div class="row my-3" style="align-items:center;">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <button type="button" class="btn btn-light mx-1 my-1 btn-play">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                        class="bi bi-play-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                        <path
+                            d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445" />
+                    </svg>
+                    Play
+                </button>
+
+                <!-- Pause button -->
+                <button type="button" class="btn btn-light mx-1 my-1 btn-pause">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" fill="currentColor"
+                        class="bi bi-pause" viewBox="0 0 16 16">
+                        <path
+                            d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5" />
+                    </svg>
+                    Pause
+                </button>
+                <button type="button" class="btn btn-primary mx-1 my-1" id="sddownload">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-download" viewBox="0 0 16 16">
+                        <path
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                        <path
+                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                    </svg>
+                    Download (SD)</button>
+                <button type="button" class="btn btn-primary mx-1 my-1" id="hddownload">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-download" viewBox="0 0 16 16">
+                        <path
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                        <path
+                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                    </svg>
+                    Download (HD)</button>
+
+            </div>
+        </div>
+        <div class="row my-3" style="align-items:center;">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <span class="mr-2">Title:</span>
+                <p class="mb-0 align-items-center" id="title"></p>
+            </div>
+
+        </div>
+        <div class="row my-3" style="align-items:center;">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <span class="mr-2">Author :</span>
+                <p class="mb-0 align-items-center" id="author"></p>
+            </div>
+        </div>
+        <div class="row my-3" style="align-items:center;">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <span class="mr-2">Original Source :</span>
+                <a id="aos" href="" style="color: rgb(13, 15, 13);">
+                    <p class="mb-0 align-items-center" id="originalsource"></p>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <button type="button" class="btn btn-primary" style="background-color:blue;"
+                    onclick="back()">Back</button>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+            <!-- <div class="col-lg-8">
+                <button type="button" class="btn btn-primary" style="background-color:blue;">Download</button>
+            </div> -->
+        </div>
+    </div>
+    <!-- spinner -->
+    <div id="spinner-container">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- about  -->
+    <section class="container my-5 " style="color:black;background-color: #89CFF0; ">
+        <!-- Rest of your HTML code -->
+        <div class="container my-4">
+            <h2 class="mb-4" style="font-size: 45px; color: rgb(6, 5, 5); overflow: auto;">About MediaHubPro</h2>
+
+            <p class="lead">Welcome to MediaHubPro - Your Ultimate Media Companion!</p>
+
+            <p>At MediaHubPro, we provide a versatile platform for downloading and playing various types of media
+                content. Our website supports the download of audio, video, and images from popular social media
+                platforms.</p>
+
+            <h2 class="mt-4">Supported Media Types</h2>
+            <p>Our website allows you to download content from the following media types:</p>
+            <ul>
+                <li>Audio</li>
+                <li>Video</li>
+                <li>Image</li>
+            </ul>
+
+            <h2 class="mt-4">Video Playback</h2>
+            <p>Enjoy a seamless video playback experience with MediaHubPro. We support video playback in two
+                qualities:
+            </p>
+            <ul>
+                <li>HD (High Definition)</li>
+                <li>SD (Standard Definition)</li>
+            </ul>
+
+            <p class="lead mt-4">
+                <a class="btn btn-primary btn-lg" href="#" role="button">Get Started</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <div style="text-align: center; color: #15181a;">
+        <!-- After the first div and before the second div -->
+        <hr class="my-5 mx-5" style="border: 1px solid #112a3a;">
+        <p class="mb-1">© 2024 MediaHubPro. All rights reserved.</p>
+        <p class="mb-0">New Multi-Media downloader. Developed by Vinod Kumawat .
+        </p>
+    </div>
+
+
+    <script>
+        var isPasteMode = true;
+        var sdurl = "";
+        var hdurl = "";
+        var title = "";
+        async function downloadVideo() {
+            showSpinner();
+            const urlInput = document.getElementById('redirectInput').value; // Corrected the ID here
+            const url = `https://social-media-video-downloader.p.rapidapi.com/smvd/get/all?url=${encodeURIComponent(urlInput)}&filename=Downloaded%20Video`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '1c8e69b71bmsh91d8dd8ce5ffd6fp1fc3c9jsnb9837f306ee2',
+                    'X-RapidAPI-Host': 'social-media-video-downloader.p.rapidapi.com'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const result = await response.json();
+
+                console.log(result);
+                title = result.title;
+                document.getElementById('title').innerHTML = result.title;
+                document.getElementById('author').innerHTML = result.author;
+                document.getElementById('originalsource').innerHTML = result.src_url;
+                document.getElementById('aos').href = result.src_url;
+                
+                if (result) {
+                    hdurl = result.links.find(link => link.quality === 'hd')?.link;
+                    sdurl = result.links.find(link => link.quality === 'sd')?.link;
+                    document.getElementById("video").src = hdurl;
+                    toggleDivs();
+                    hideSpinner();
+
+                    // Now you can use hdUrl and sdUrl as needed
+                    // console.log('HD URL:', hdUrl);
+                    // console.log('SD URL:', sdUrl);
+                }
+            } catch (error) {
+                document.getElementById('redirectInput').value = "";
+                hideSpinner();
+                alert("Invalid URL")
+                console.error(error);
+            }
+        }
+
+        function togglePasteClear() {
+            var button = document.querySelector('.btn-primary');
+            var clipboardIcon = button.querySelector('svg');
+
+            if (isPasteMode) {
+                navigator.clipboard.readText().then(function (clipboardText) {
+                    document.getElementById('redirectInput').value = clipboardText;
+                }).catch(function (err) {
+                    console.error('Failed to read text from clipboard', err);
+                });
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 1 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path></svg> Clear';
+                isPasteMode = false;
+            } else {
+                document.getElementById('redirectInput').value = "";
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="15" fill="currentColor" class="bi bi-clipboard mx-1" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"></path><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"></path></svg> Paste';
+                isPasteMode = true;
+            }
+        }
+
+        //back
+        function back()
+        {
+            var video = document.querySelector('video');
+            var pauseButton = document.querySelector('.btn-pause');
+            video.pause();
+            showSpinner();
+            toggleDivs();
+            hideSpinner();
+        }
+
+        //hide divs
+        function toggleDivs() {
+            var firstDiv = document.getElementById('firstDiv');
+            var secondDiv = document.getElementById('secondDiv');
+
+            if (firstDiv.style.display !== 'none') {
+                firstDiv.style.display = 'none';
+                secondDiv.style.display = 'block';
+            } else {
+                firstDiv.style.display = 'block';
+                secondDiv.style.display = 'none';
+            }
+        }
+
+        //Function to show the spinner
+        function showSpinner() {
+            document.getElementById('spinner-container').style.display = 'flex';
+        }
+
+        // Function to hide the spinner
+        function hideSpinner() {
+            document.getElementById('spinner-container').style.display = 'none';
+        }
+
+        //download bunnon to download SD video
+        document.getElementById('sddownload').addEventListener('click', function () {
+            // alert(urld)
+            var downloadLink = document.createElement('a');
+            downloadLink.href = sdurl;
+            downloadLink.download = 'video.mp4';
+            downloadLink.click();
+        });
+
+        //download bunnon to download HD video
+        document.getElementById('hddownload').addEventListener('click', function () {
+            // alert(urld)
+            var downloadLink = document.createElement('a');
+            downloadLink.href = hdurl;
+            downloadLink.download = 'video.mp4';
+            downloadLink.click();
+        });
+
+        //play pause
+        document.addEventListener('DOMContentLoaded', function () {
+            var video = document.querySelector('video');
+            var playButton = document.querySelector('.btn-play');
+            var pauseButton = document.querySelector('.btn-pause');
+
+            playButton.addEventListener('click', function () {
+                video.play();on
+            });
+
+            pauseButton.addEventListener('click', function () {
+                video.pause();
+            });
+        });
+    </script>
+
+
+
+    <section class="container my-5" style="color:black;">
+        <!-- Rest of your HTML code -->
+    </section>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
